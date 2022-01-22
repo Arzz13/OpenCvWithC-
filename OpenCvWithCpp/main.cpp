@@ -1,14 +1,19 @@
-//
-//  main.cpp
-//  OpenCvWithCpp
-//
-//  Created by asfar on 16/01/22.
-//
+#include<string>
+#include<iostream>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 
-#include <iostream>
+#include "readAndBasicFunctions.hpp"
+#include "segmentColors.hpp"
+using namespace std;
+using namespace cv;
 
-int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
-    return 0;
+int main() {
+   char path[]="Resources/lambo.png";
+    //webCam();
+  detectShape(path);
+
+
 }
+
