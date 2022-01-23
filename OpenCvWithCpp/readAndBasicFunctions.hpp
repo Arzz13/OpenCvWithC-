@@ -8,6 +8,8 @@
 using namespace std;
 using namespace cv;
 
+extern vector<vector<int>> newPoints;
+
 Mat imageRead(char []);
 Mat videoRead();
 void webCam();

@@ -3,7 +3,9 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
+
 #include "readAndBasicFunctions.hpp"
+#include "segmentColors.hpp"
 
 using namespace std;
 using namespace cv; //All OpenCV classes and functions are in cv namespace
@@ -27,21 +29,14 @@ Mat imageRead(char p[]){   //Path where the image is found
 }
 
 
-///////////////////////////////////////////  Video //////////////////////////////////
-Mat videoRead(){
-    char path[]="path";
-VideoCapture cap(path); //VideoCapture object should be constructed by passing the path.Then the VideoCapture object should be read frame by frame. Finally those frames should be displayed in a window sequentially.(Video is sequence of images right?)
 
-Mat img;
+vector<vector<int>> newPoints;  //These are the points where the object appears on the image(image from video) .So, we need to paint on these points only using drawCanvas function.
+//This container also has the index of color.So, we know which color to draw.
 
-while (true) {
-
-    cap.read(img);
-    return img;
-    //imshow("Image", img);//Reading each frame from video capture object and storing in img Mat file
-    //waitKey(20);  //Each frame waits for 20ms.
-}
-}
+vector<Scalar> paintBrushColor{ {255,0,255}, // When Purple detected,then use this value                                                       (purple's bgr) to draw on canvas
+                                {0,255,0},     // When Green detected,then use this value(green's                   bgr) to draw on canvas
+                                {255,0,0}   // When Blue detected,then use this value(blue's                 bgr) to draw on canvas
+};    
 
 void webCam(){
 
@@ -51,7 +46,11 @@ VideoCapture cap(0);//Give the index of your camera/webcam to the constructor of
     Mat img;
 
         while (true) {
-            cap.read(img);
+            cap.read(img); //Read each image into the img object
+            
+            //Finds each object's position on the screen and its color
+            newPoints=findColor(img); //Returns the center,top and color of circle to be drawn.
+            drawOnCanvas(newPoints,paintBrushColor,img); //Painting on the place where the object is on the canvas(screen) with the color same as object.
             
             imshow("Image", img);
             waitKey(1);
